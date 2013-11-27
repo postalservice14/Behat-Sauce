@@ -2,34 +2,44 @@
 
 namespace Behat\Sauce\Console\Processor;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\Console\Processor\ProcessorInterface;
 use Behat\Sauce\Context\SauceContext;
 
-class SauceOnDemandProcessor implements ProcessorInterface {
-    
-    public function configure(Command $command) {
+class SauceOnDemandProcessor implements ProcessorInterface
+{
+    public function configure(Command $command)
+    {
         $command
             ->addOption(
-                '--browser', null, InputOption::VALUE_REQUIRED,
+                '--browser',
+                null,
+                InputOption::VALUE_REQUIRED,
                 'SauceLabs browser name.  Default is:  <comment>firefox</comment>'
             )
             ->addOption(
-                '--browser-version', null, InputOption::VALUE_REQUIRED,
+                '--browser-version',
+                null,
+                InputOption::VALUE_REQUIRED,
                 'SauceLabs browser version.  Default is:  <comment>7</comment>'
             )
             ->addOption(
-                '--os', null, InputOption::VALUE_REQUIRED,
+                '--os',
+                null,
+                InputOption::VALUE_REQUIRED,
                 'SauceLabs operating system.  Default is:  <comment>Windows 2003</comment>'
             )
             ->addOption(
-                '--local', null, InputOption::VALUE_NONE,
-                'Run test locally instead.');
+                '--local',
+                null,
+                InputOption::VALUE_NONE,
+                'Run test locally instead.'
+            );
     }
 
     public function process(

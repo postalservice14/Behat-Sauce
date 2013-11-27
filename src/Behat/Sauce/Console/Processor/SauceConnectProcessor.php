@@ -2,20 +2,23 @@
 
 namespace Behat\Sauce\Console\Processor;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\Console\Processor\ProcessorInterface;
 
-class SauceConnectProcessor implements ProcessorInterface {
-    
-    public function configure(Command $command) {
+class SauceConnectProcessor implements ProcessorInterface
+{
+    public function configure(Command $command)
+    {
         $command
             ->addOption(
-                '--tunnel', null, InputOption::VALUE_NONE,
+                '--tunnel',
+                null,
+                InputOption::VALUE_NONE,
                 "Start <commen>Sauce Connect</comment>.\n"
             );
     }
@@ -42,7 +45,7 @@ class SauceConnectProcessor implements ProcessorInterface {
             passthru(
                 sprintf(
                     'java -jar %s %s %s',
-                     __DIR__ . '/../../../../../vendor/Sauce-Connect/Sauce-Connect.jar',
+                    __DIR__ . '/../../../../../vendor/Sauce-Connect/Sauce-Connect.jar',
                     $parameters['username'],
                     $parameters['access_key']
                 )

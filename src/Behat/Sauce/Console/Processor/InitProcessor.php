@@ -2,10 +2,7 @@
 
 namespace Behat\Sauce\Console\Processor;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use Behat\Behat\PathLocator;
 use Behat\Behat\Console\Processor as Behat;
@@ -15,16 +12,14 @@ use Behat\Behat\Console\Processor as Behat;
  *
  * @author LB Denker <lb@elblinkin.info>
  */
-class InitProcessor
-extends Behat\InitProcessor {
+class InitProcessor extends Behat\InitProcessor
+{
 
     /**
      * {@inheritDoc}
      */
-    protected function initFeaturesDirectoryStructure(
-        PathLocator $locator,
-        OutputInterface $output
-    ) {
+    protected function initFeaturesDirectoryStructure(PathLocator $locator, OutputInterface $output)
+    {
         parent::initFeaturesDirectoryStructure($locator, $output);
         $base_path = realpath($locator->getWorkPath()) . DIRECTORY_SEPARATOR;
         $config_path = $base_path . 'config';
@@ -53,7 +48,8 @@ extends Behat\InitProcessor {
     /**
      * {@inheritDoc}
      */
-    protected function getFeatureContextSkelet() {
+    protected function getFeatureContextSkelet()
+    {
         return <<<'PHP'
 <?php
 
@@ -93,7 +89,8 @@ class FeatureContext extends SauceContext {
 PHP;
     }
 
-    protected function getConfigSkelet() {
+    protected function getConfigSkelet()
+    {
         return <<<'YAML'
 default:
     paths:

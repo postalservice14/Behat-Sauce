@@ -2,11 +2,11 @@
 
 namespace Behat\Sauce\Console;
 
-use Symfony\Component\Console\Application,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Input\InputDefinition,
-    Symfony\Component\Console\Input\InputOption;
-    
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputOption;
+
 use Behat\Sauce\Console\Command\SauceCommand;
 
 /**
@@ -14,12 +14,13 @@ use Behat\Sauce\Console\Command\SauceCommand;
  *
  * @author LB Denker <lb@elblinkin.info>
  */
-class SauceApplication extends Application {
-    
+class SauceApplication extends Application
+{
     /**
      * {@inheritDoc}
      */
-    public function __construct($version) {
+    public function __construct($version)
+    {
         parent::__construct('Behat-Sauce', $version);
         $this->add(new SauceCommand());
     }
@@ -27,7 +28,8 @@ class SauceApplication extends Application {
     /**
      * {@inheritDoc}
      */
-    public function getDefinition() {
+    public function getDefinition()
+    {
         return new InputDefinition(
             array(
                 new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
@@ -40,7 +42,8 @@ class SauceApplication extends Application {
     /**
      * {@inheritDoc}
      */
-    protected function getCommandName(InputInterface $input) {
+    protected function getCommandName(InputInterface $input)
+    {
         return 'behat-sauce';
     }
 }

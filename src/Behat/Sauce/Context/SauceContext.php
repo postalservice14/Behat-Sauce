@@ -2,18 +2,17 @@
 
 namespace Behat\Sauce\Context;
 
-use Behat\Behat\Event\ScenarioEvent,
-    Behat\Behat\Event\SuiteEvent;
+use Behat\Behat\Event\ScenarioEvent;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Mink\Behat\Context\BaseMinkContext;
-use Behat\Mink\Mink,
-    Behat\Mink\Session,
-    Behat\Mink\Driver\SeleniumDriver;
+use Behat\Mink\Mink;
+use Behat\Mink\Session;
+use Behat\Mink\Driver\SeleniumDriver;
 use Selenium\Client as SeleniumClient;
 use InvalidArgumentException;
 
-class SauceContext extends BaseMinkContext {
-
+class SauceContext extends BaseMinkContext
+{
     const PASSED = 0;
     const PENDING = 2;
     const UNDEFINED = 3;
@@ -43,7 +42,8 @@ class SauceContext extends BaseMinkContext {
     /**
      * {@inheritDoc}
      */
-    public function getMink() {
+    public function getMink()
+    {
         if (self::$mink === null) {
             self::$mink = new Mink();
         }
@@ -53,14 +53,16 @@ class SauceContext extends BaseMinkContext {
     /**
      * {@inheritDoc}
      */
-    public function getParameters() {
+    public function getParameters()
+    {
         return $this->parameters;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getParameter($name) {
+    public function getParameter($name)
+    {
         return isset($this->parameters[$name])
             ? $this->parameters[$name]
             : null;
@@ -68,9 +70,9 @@ class SauceContext extends BaseMinkContext {
 
     /**
      * Initializes Mink instance and sessions.
-     * 
+     *
      * @param string|null $browser SauceLabs browser name
-     * @param string|null $browser_version SauceLabs browser version
+     * @param string $version SauceLabs browser version
      * @param string|null $os SauceLabs operating system
      * @param bool $local Flag to indicate whether or not to use Sauce
      */
@@ -80,7 +82,7 @@ class SauceContext extends BaseMinkContext {
         $os,
         $local
     ) {
-        if ($browser !==  null) {
+        if ($browser !== null) {
             self::$browser = $browser;
         }
         if ($version !== null) {
@@ -97,7 +99,8 @@ class SauceContext extends BaseMinkContext {
     /**
      * {@inheritDoc}
      */
-    public function prepareMinkSessions($event) {
+    public function prepareMinkSessions($event)
+    {
         $this->session_id = null;
         $scenario = $event instanceof ScenarioEvent
             ? $event->getScenario()
@@ -145,7 +148,8 @@ class SauceContext extends BaseMinkContext {
      *
      * @AfterScenario
      */
-    public function integrateJobResults($event) {
+    public function integrateJobResults($event)
+    {
         $scenario = $event instanceof ScenarioEvent
             ? $event->getScenario()
             : $event->getOutline();
@@ -185,12 +189,14 @@ class SauceContext extends BaseMinkContext {
      *
      * @AfterSuite
      */
-    public static function stopMinkSessions() {
+    public static function stopMinkSessions()
+    {
         self::$mink->stopSessions();
         self::$mink = null;
     }
 
-    private function getHost() {
+    private function getHost()
+    {
         if (self::$local) {
             $local = $this->getParameter('local');
             if ($local !== null) {
@@ -205,7 +211,8 @@ class SauceContext extends BaseMinkContext {
         }
     }
 
-    private function getPort() {
+    private function getPort()
+    {
         if (self::$local) {
             $local = $this->getParameter('local');
             if ($local !== null) {
@@ -214,13 +221,14 @@ class SauceContext extends BaseMinkContext {
                 }
             }
             return 4444;
-         } else {
+        } else {
             $port = $this->getParameter('port');
             return ($port !== null) ? $port : '80';
-         }
+        }
     }
 
-    private function getUsername() {
+    private function getUsername()
+    {
         $username = $this->getParameter('username');
         if ($username === null) {
             throw new InvalidArgumentException('Must set "username" in behat.yml');
@@ -228,7 +236,8 @@ class SauceContext extends BaseMinkContext {
         return $username;
     }
 
-    private function getAccessKey() {
+    private function getAccessKey()
+    {
         $access_key = $this->getParameter('access_key');
         if ($access_key === null) {
             throw new InvalidArgumentException('Must set "access_key" in behat.yml');
@@ -236,7 +245,8 @@ class SauceContext extends BaseMinkContext {
         return $access_key;
     }
 
-    private function getBrowser($title) {
+    private function getBrowser($title)
+    {
         if (self::$local) {
             return self::$browser;
         } else {
@@ -259,7 +269,8 @@ class SauceContext extends BaseMinkContext {
         }
     }
 
-    private function getSessionId() {
+    private function getSessionId()
+    {
         if ($this->session_id === null) {
             $this->session_id = $this->getMink()
                 ->getSession()
@@ -270,11 +281,12 @@ class SauceContext extends BaseMinkContext {
         return $this->session_id;
     }
 
-    public function getNoLoginJobLink() {
+    public function getNoLoginJobLink()
+    {
         $session_id = $this->getSessionId();
         $username = $this->getUsername();
         $access_key = $this->getAccessKey();
-        $token = hash_hmac('md5', $session_id, $username.':'.$access_key);
+        $token = hash_hmac('md5', $session_id, $username . ':' . $access_key);
         return sprintf(
             'https://saucelabs.com/jobs/%s?auth=%s',
             $session_id,
@@ -282,11 +294,13 @@ class SauceContext extends BaseMinkContext {
         );
     }
 
-    public function isLocal() {
+    public function isLocal()
+    {
         return self::$local;
     }
 
-    private function modifySauceJob($payload, $session_id) {
+    private function modifySauceJob($payload, $session_id)
+    {
         $username = $this->getUsername();
         $access_key = $this->getAccessKey();
         $ch = curl_init(
@@ -317,12 +331,13 @@ class SauceContext extends BaseMinkContext {
      *
      * @return  string
      */
-    private function getDefaultShowCmd() {
+    private function getDefaultShowCmd()
+    {
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             return 'explorer.exe $s';
         }
 
-        switch(PHP_OS) {
+        switch (PHP_OS) {
             case 'Darwin':
                 return 'open %s';
             case 'Linux':

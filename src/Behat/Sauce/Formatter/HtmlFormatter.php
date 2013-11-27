@@ -2,34 +2,36 @@
 
 namespace Behat\Sauce\Formatter;
 
-use Behat\Behat\Event\OutlineExampleEvent,
-    Behat\Behat\Event\ScenarioEvent;
+use Behat\Behat\Event\OutlineExampleEvent;
+use Behat\Behat\Event\ScenarioEvent;
 use Behat\Behat\Formatter as Behat;
 use Behat\Gherkin\Node\AbstractScenarioNode;
 use Behat\Sauce\Context\SauceContext;
 
-class HtmlFormatter extends Behat\HtmlFormatter {
-
+class HtmlFormatter extends Behat\HtmlFormatter
+{
     private $sauce_link;
 
     /**
      * {@inheritDoc}
      */
-	public function beforeScenario(ScenarioEvent $event) {
+    public function beforeScenario(ScenarioEvent $event)
+    {
         $context = $event->getContext();
         if ($context instanceof SauceContext) {
-        	if (!$context->isLocal()) {
+            if (!$context->isLocal()) {
                 $this->sauce_link = $context->getNoLoginJobLink();
-        	}
+            }
         }
         parent::beforeScenario($event);
         $this->sauce_link = null;
-	}
+    }
 
     /**
      * {@inheritdoc}
      */
-    protected function printScenarioName(AbstractScenarioNode $scenario) {
+    protected function printScenarioName(AbstractScenarioNode $scenario)
+    {
         $this->writeln('<h3>');
         $this->writeln('<span class="keyword">' . $scenario->getKeyword() . ': </span>');
         if ($scenario->getTitle()) {
@@ -54,21 +56,23 @@ class HtmlFormatter extends Behat\HtmlFormatter {
     /**
      * {@inheritDoc}
      */
-	public function afterOutlineExample(OutlineExampleEvent $event) {
+    public function afterOutlineExample(OutlineExampleEvent $event)
+    {
         $context = $event->getContext();
         if ($context instanceof SauceContext) {
-        	if (!$context->isLocal()) {
+            if (!$context->isLocal()) {
                 $this->sauce_link = $context->getNoLoginJobLink();
             }
         }
         parent::afterOutlineExample($event);
         $this->sauce_link = null;
-	}
+    }
 
     /**
      * {@inheritDoc}
      */
-    protected function printColorizedTableRow($row, $color) {
+    protected function printColorizedTableRow($row, $color)
+    {
         $this->writeln('<tr class="' . $color . '">');
 
         foreach ($row as $column) {
